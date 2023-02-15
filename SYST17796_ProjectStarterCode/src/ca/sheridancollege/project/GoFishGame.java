@@ -21,7 +21,7 @@ public class GoFishGame {
 
     private Player currentPlayer;
 
-    public GoFishGame(String player1Name, String player2Name) {1
+    public GoFishGame(String player1Name, String player2Name) {
         player1 = new Player(player1Name);
         player2 = new Player(player2Name);
         deck = new GroupOfCards();
@@ -43,24 +43,27 @@ public class GoFishGame {
 
     public void playTurn(String rank) {
         Player opponent = (currentPlayer == player1) ? player2 : player1;
-
+    
         System.out.println(currentPlayer.getName() + " asks " + opponent.getName() + " for " + rank);
-
+    
         boolean successful = false;
         for (Card card : opponent.searchHand(rank)) {
             currentPlayer.addCardToHand(card);
             opponent.playCard(opponent.getHand().indexOf(card));
             successful = true;
         }
-
+    
         if (successful) {
             System.out.println("Successful!");
         } else {
             System.out.println("Go fish!");
-            currentPlayer.addCardToHand(deck.draw());
+            if (!deck.isEmpty()) {
+                currentPlayer.addCardToHand(deck.draw());
+            }
             switchCurrentPlayer();
         }
     }
+    
 
     private void switchCurrentPlayer() {
         currentPlayer = (currentPlayer == player1) ? player2 : player1;
@@ -70,50 +73,51 @@ public class GoFishGame {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
+    
         // Get player names from the user
-        String player1Name = null;
-        String player2Name = null;
-
-        while (player1Name == null || player1Name.isEmpty()) {
+        String player1Name = "";
+        String player2Name = "";
+    
+        while (player1Name.isEmpty()) {
             System.out.print("Enter a name for player 1: ");
             player1Name = scanner.nextLine().trim();
         }
-
-        while (player2Name == null || player2Name.isEmpty()) {
+    
+        while (player2Name.isEmpty()) {
             System.out.print("Enter a name for player 2: ");
             player2Name = scanner.nextLine().trim();
         }
-
+    
         // Create the game and start playing
         GoFishGame game = new GoFishGame(player1Name, player2Name);
-
+    
         while (!game.isGameOver()) {
             System.out.println("\n" + game.getOpponentHandSizesString());
-
+    
             Player currentPlayer = game.getCurrentPlayer();
             System.out.println("\n" + currentPlayer.getName() + "'s turn");
-
+    
             String rank = null;
             while (rank == null || rank.isEmpty()) {
                 System.out.print("Enter a rank to ask for: ");
                 rank = scanner.nextLine().trim();
             }
-
+    
             game.playTurn(rank);
         }
-
+    
         System.out.println("\nGame over!");
         System.out.println(game.getOpponentHandSizesString());
-
+    
         int player1Score = player1.removeMatchingCards("Ace") + player1.removeMatchingCards("King");
         int player2Score = player2.removeMatchingCards("Ace") + player2.removeMatchingCards("King");
-
-        if (player1.getScore() > player2.getScore()) {
+    
+        if (player1Score > player2Score) {
             System.out.println(player1Name + " wins!");
-        } else if (player2.getScore() > player1.getScore()) {
+        } else if (player2Score > player1Score) {
             System.out.println(player2Name + " wins!");
         } else {
             System.out.println("It's a tie!");
         }
     }}
+    
