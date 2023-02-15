@@ -1,56 +1,70 @@
 /**
  * SYST 17796 Project Base code.
- * Author: Cyrus
+ * Author: Cyrus Tabakhi
  */
 package ca.sheridancollege.project;
 
 /**
- * An abstract class that models each player in a card game.
- * This class should be extended for specific types of players.
+ * A class that models each Player in the game. Players have an identifier, which should be unique.
+ *
+ * @author Cyrus
  */
-public abstract class Player {
-    private String name;
-    private GroupOfCards hand;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Player {
+    private final String name;
+    private List<Card> hand;
+    private int score;
 
     public Player(String name) {
         this.name = name;
-        this.hand = new GroupOfCards();
+        this.hand = new ArrayList<>();
     }
-    
-    /**
-     * @return the name of the player
-     */
+
     public String getName() {
         return name;
     }
-    
-    /**
-     * Set the name of the player
-     * @param name the name to set for the player
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    /**
-     * @return the hand of the player
-     */
-    public GroupOfCards getHand() {
+
+    public List<Card> getHand() {
         return hand;
     }
-    
-    /**
-     * Set the hand of the player
-     * @param hand the hand to set for the player
-     */
-    public void setHand(GroupOfCards hand) {
-        this.hand = hand;
+
+    public int getHandSize() {
+        return hand.size();
+    }
+
+    public void addCardToHand(Card card) {
+        hand.add(card);
+    }
+
+    public Card playCard(int index) {
+        return hand.remove(index);
+    }
+
+    public List<Card> searchHand(String rank) {
+        List<Card> matchingCards = new ArrayList<>();
+
+        for (Card card : hand) {
+            if (card.getRank().equals(rank)) {
+                matchingCards.add(card);
+            }
+        }
+
+        return matchingCards;
+    }
+
+    public int removeMatchingCards(String rank) {
+        List<Card> matchingCards = searchHand(rank);
+        hand.removeAll(matchingCards);
+        return matchingCards.size();
     }
     
-    /**
-     * Abstract method to be implemented by each subclass of Player.
-     * Plays a turn of the game according to the specific rules for that player.
-     */
-    public abstract void playTurn();
+public void incrementScore() {
+    score++;
 }
-    
+
+public int getScore() {
+    return score;
+}
+}

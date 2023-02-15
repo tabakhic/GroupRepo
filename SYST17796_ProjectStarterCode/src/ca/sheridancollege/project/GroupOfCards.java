@@ -1,60 +1,40 @@
 /**
  * SYST 17796 Project Base code.
- *Author: Cyrus Tabakhi
+ * Author: Cyrus Tabakhi
  */
 package ca.sheridancollege.project;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-/**
- * A class that models a group of cards for a card game.
- */
 public class GroupOfCards {
-    private ArrayList<Card> cards;
+    private List<Card> cards;
 
     public GroupOfCards() {
-        this.cards = new ArrayList<>();
+        String[] ranks = {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"};
+        String[] suits = {"Clubs", "Diamonds", "Hearts", "Spades"};
+
+        cards = new ArrayList<>();
+
+        for (String suit : suits) {
+            for (String rank : ranks) {
+                cards.add(new Card(rank, suit));
+            }
+        }
+
+        shuffle();
     }
 
-    /**
-     * Adds a card to the group of cards.
-     * @param card the card to be added
-     */
-    public void addCard(Card card) {
-        this.cards.add(card);
-    }
-
-    /**
-     * Removes a card from the group of cards.
-     * @param card the card to be removed
-     */
-    public void removeCard(Card card) {
-        this.cards.remove(card);
-    }
-
-    /**
-     * Gets the card at the specified index.
-     * @param index the index of the card to retrieve
-     * @return the card at the specified index
-     */
-    public Card getCard(int index) {
-        return this.cards.get(index);
-    }
-
-    /**
-     * Gets the number of cards in the group of cards.
-     * @return the number of cards in the group of cards
-     */
-    public int getNumberOfCards() {
-        return this.cards.size();
-    }
-
-    /**
-     * Shuffles the group of cards.
-     */
     public void shuffle() {
-        Collections.shuffle(this.cards);
+        Collections.shuffle(cards);
+    }
+
+    public Card draw() {
+        return cards.remove(0);
+    }
+
+    public boolean isEmpty() {
+        return cards.isEmpty();
     }
 }
-
